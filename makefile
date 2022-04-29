@@ -15,5 +15,5 @@ Main: Assignament.o Cost.o Main.cpp
 clean:
 	rm -f *.o test_Cost
 
-run all: test_Cost Main
-	./test_Cost
+run all: Main
+	./main

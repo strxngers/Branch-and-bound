@@ -4,5 +4,6 @@
 int main(){
 
     Assignament a1(5);
-    cout << "a1";
+    a1.Solve();
+    
 }

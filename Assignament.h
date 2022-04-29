@@ -8,16 +8,14 @@ class Assignament
 private:
     int lenght;
     int *array;
-    Cost matrix;
-    int cpu;
-    int process;
     
 
 public:
     Assignament();
     Assignament(int lenght);
-    int greedy();
+    int greedy(Cost cost);
     bool isBusy(int position);
     void Solve();
-    Cost getCost();
+    int* generateArray(int size);
+
 };
