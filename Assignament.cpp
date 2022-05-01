@@ -23,7 +23,7 @@ int* Assignament::generateArray(int size){
     
 }
 
-int Assignament::greedy(Cost matrix){
+int Assignament::greedy(Cost* matrix){
     int *array = generateArray(this->lenght);
     
     int time = 0;
@@ -34,10 +34,10 @@ int Assignament::greedy(Cost matrix){
        
         for(int j = 0; j < this->lenght; j++){
             
-            if(matrix.getValue(i,j) < menor && array[j] == 0){
+            if(matrix->getCost(i,j) < menor && array[j] == 0){
                 
 
-                menor = matrix.getValue(i,j);
+                menor = matrix->getCost(i,j);
                 current = j;
             }
         }
@@ -58,9 +58,95 @@ bool Assignament::isBusy(int position){
     }
 }
 
+State* Assignament::addState(State* head, State* nextHead){
+    if(head == NULL){
+        return nextHead;
+    }else{
+        State* aux = head;
+        while(aux->next != NULL){
+            aux = aux->next;
+        }
+        aux->next = nextHead;
+        return head;
+    }
+}
+
+State* Assignament::removeHead(State* head){
+    if(head == NULL){
+        return NULL;
+    }
+    else{
+        return head->next;
+    }
+}
+
+bool Assignament::isSolution(State* state){
+    for (int i = 0; i < state->size; i++){
+        if(state->visited[i] == false){
+            return false;
+        }
+    }
+    return true;
+}
+
+State* Assignament::generateSons(int greedyTime, Cost* matrix,State* open, State* father){
+    int current = father->current;
+    
+    for(int i = 0; i < father->size; i++){
+        
+        //si no esa ocupado ni se ha asignado la tarea y el tiempo actual + el tiempo del hijo es menor al tiempo del greedy
+        if(father->busyCpu[current] == -1 && father->visited[i] == false && matrix->getValue(current,i) + father->time < greedyTime){
+            State* aux = new State(father->size,current + 1,father->busyCpu,father->visited);
+            aux->visited[i] = true;
+            // se guarda en el array en el procesador current el numero de tarea i
+            
+            aux->busyCpu[current] = i;
+            // se pasa al siguiente procesador
+            aux->current = current + 1;
+            //se añade el tiempo
+            aux->time = father->time + matrix->getCost(current,i);
+            open = addState(open,aux);
+        }
+        else{
+            continue;
+        }
+    }
+    return open;
+}
+
 void Assignament::Solve(){
-    Cost matrix(this->lenght);
-    matrix.print();
-    cout << greedy(matrix);
+    Cost* matrix = new Cost(this->lenght);
+    State* open = new State(this->lenght,0);
+    State* solution;
+    //tiempo base para empezar a podar
+    int greedyTime = greedy(matrix);
+    cout << "greedy time: " << greedyTime << "\n";
+    while (open != NULL){
+        //se saca el primero de la lista
+        State* aux = open;
+        open = aux->next;
+        //si es solucion
+        if(isSolution(aux) && aux->time <= greedyTime){
+            //Crear una condicion si se encuentra una solucion compararlas y elegir
+            //la mejor y actualizar el tiempo del greedy
+            solution = aux;
+            greedyTime = aux->time;
+            for(int i = 0 ; i < aux->size; i++){
+                cout << aux->busyCpu[i]<< " ";
+            }
+            cout<<"\n" <<"\n";
+            matrix->print();
+        }
+        //generar los hijos
+        else{
+            //parte de la cpu actual del estado
+            open = generateSons(greedyTime,matrix,open,aux);
+
+        }
+    }
+    
+    //matrix.print();
+    cout << greedy(matrix) << "\n";
+    cout << greedyTime;
 }
 

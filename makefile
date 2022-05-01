@@ -9,8 +9,11 @@ Cost.o: Cost.cpp Cost.h
 Assignament.o: Assignament.cpp Assignament.h
 	g++ -c Assignament.cpp
 
-Main: Assignament.o Cost.o Main.cpp
-	g++ Assignament.o Cost.o Main.cpp -o main
+State.o: State.cpp State.h
+	g++ -c State.cpp
+
+Main: Assignament.o Cost.o State.o Main.cpp
+	g++ Assignament.o Cost.o State.o Main.cpp -o main
 
 clean:
 	rm -f *.o test_Cost

@@ -6,6 +6,6 @@ class Nodo {
 public:
     Nodo();
     Nodo(int i, int j);
-
+    
 
 };

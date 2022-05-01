@@ -3,7 +3,7 @@
 
 int main(){
 
-    Assignament a1(5);
+    Assignament a1(500);
     a1.Solve();
     
 }
