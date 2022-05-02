@@ -7,11 +7,13 @@ using namespace std;
 class Assignament
 {
 private:
+    // variables
     int lenght;
     int *array;
     
 
 public:
+    // Funciones y variables que seràn utilizadas
     Assignament();
     Assignament(int lenght);
     int greedy(Cost* cost);

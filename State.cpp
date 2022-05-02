@@ -41,7 +41,7 @@ bool* State::generateVisitedArray(int size){
     return array;
 }
 
-int* State::copyArray(int* array, int size){
+void State::copyArray(int* array, int size){
     int *aux = new int[size];
     for (int i = 0; i < size; i++){
         aux[i] = array[i];

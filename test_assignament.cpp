@@ -1,9 +1,6 @@
 #include "Assignament.h"
-#include <iostream>
 
 int main(){
-
-    Assignament a1(13);
+    Assignament a1(8);
     a1.Solve();
-    
 }

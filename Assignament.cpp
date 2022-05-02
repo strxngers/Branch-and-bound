@@ -4,6 +4,7 @@ Assignament::Assignament(){
 
 }
 
+// constructor
 Assignament::Assignament(int size){
     this->lenght = size;
     this->array = new int [size];
@@ -12,42 +13,36 @@ Assignament::Assignament(int size){
     //this->matrix = Cost(lenght);
 }
 
- 
-
+// Generar un array para poder marcarlo despues
 int* Assignament::generateArray(int size){
     int *array = new int[size];
     for (int i = 0; i < size; i++){
         array[i] = 0;
     }
     return array;
-    
 }
 
+// Algoritmo greedy que entrega una solucion rapida con la que se hara la poda
 int Assignament::greedy(Cost* matrix){
-    int *array = generateArray(this->lenght);
-    
+    int *array = generateArray(this->lenght);    
     int time = 0;
-    
     for(int i = 0; i < this->lenght; i++){
         int menor = 999;
         int current = -1;
-       
         for(int j = 0; j < this->lenght; j++){
             
             if(matrix->getCost(i,j) < menor && array[j] == 0){
-                
-
                 menor = matrix->getCost(i,j);
                 current = j;
             }
         }
-
         array[current] = 1;
         time += menor;
     }
     return time;
 }
 
+// Revisa si el proceso esta siendo realizado por una cpu
 bool Assignament::isBusy(int position){
     if(this->array[position] == 1){
         return true;
@@ -58,6 +53,7 @@ bool Assignament::isBusy(int position){
     }
 }
 
+// Agrega el estado de un nodo, cambiando el head al siguiente
 State* Assignament::addState(State* head, State* nextHead){
     if(head == NULL){
         return nextHead;
@@ -71,6 +67,7 @@ State* Assignament::addState(State* head, State* nextHead){
     }
 }
 
+//   
 State* Assignament::removeHead(State* head){
     if(head == NULL){
         return NULL;
@@ -80,6 +77,7 @@ State* Assignament::removeHead(State* head){
     }
 }
 
+// Dice si un nodo fue visitado o no
 bool Assignament::isSolution(State* state){
     for (int i = 0; i < state->size; i++){
         if(state->visited[i] == false){
@@ -89,17 +87,15 @@ bool Assignament::isSolution(State* state){
     return true;
 }
 
+// Genera los hijos en el arbol, es decir los caminos que se podrìan tomar para encontrar la solucion
 State* Assignament::generateSons(int greedyTime, Cost* matrix,State* open, State* father){
     int current = father->current;
-    
     for(int i = 0; i < father->size; i++){
-        
         //si no esa ocupado ni se ha asignado la tarea y el tiempo actual + el tiempo del hijo es menor al tiempo del greedy
         if(father->busyCpu[current] == -1 && father->visited[i] == false && matrix->getValue(current,i) + father->time < greedyTime){
             State* aux = new State(father->size,current + 1,father->busyCpu,father->visited);
             aux->visited[i] = true;
             // se guarda en el array en el procesador current el numero de tarea i
-            
             aux->busyCpu[current] = i;
             // se pasa al siguiente procesador
             aux->current = current + 1;
@@ -114,6 +110,7 @@ State* Assignament::generateSons(int greedyTime, Cost* matrix,State* open, State
     return open;
 }
 
+// Encuentra la solucion
 void Assignament::Solve(){
     Cost* matrix = new Cost(this->lenght);
     State* open = new State(this->lenght,0);
@@ -135,7 +132,7 @@ void Assignament::Solve(){
                 cout << aux->busyCpu[i]<< " ";
             }
             cout<<"\n" <<"\n";
-            matrix->print();
+            //matrix->print();
         }
         //generar los hijos
         else{
